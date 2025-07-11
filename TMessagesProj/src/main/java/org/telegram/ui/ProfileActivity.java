@@ -1247,7 +1247,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             float normalizedProgress = 4 * min(0.25f, progress);
             float topXOffset = (topCutoutWidth > 0 ? topCutoutWidth / 2f : dp(15)) * normalizedProgress;
             Path arcAboveAvatar = new Path();
-            float bottomPoint = min((1 - progress) * (avatarY + avatarRadius * 2), normalizedProgress * max(topCutoutHeight * 1.7f, (actionBar.getOccupyStatusBar() ? AndroidUtilities.statusBarHeight / 2f : 0)));
+            float bottomPoint = min((1 - progress) * (avatarY + avatarRadius * 2), normalizedProgress * max(topCutoutHeight * 1.7f, (actionBar.getOccupyStatusBar() ? AndroidUtilities.statusBarHeight * 0.8f : 0)));
             quadToUsingCorner(arcAboveAvatar,
                     avatarCenterX - topXOffset,
                     0f,
