@@ -1,3 +1,25 @@
+## Telegram Contest 2025 r1
+
+Given the current circumstances in Iran, **including the war and internet issues**, I couldn’t rewrite the profile or spend as much time as planned. The result isn’t ideal, but I believe it reached an acceptable level, hopefully!
+
+All the animations and actions are implemented, and I tried my best to handle edge cases and keep the code quality acceptable.
+
+![Contest Result](contest_result.gif)
+
+Key features:
+- Implemented scrolling up animation for the avatar; Considered top cutout when scrolling avatar out of the screen
+- Implemented all the action buttons
+- Applied blur to images when scroll down
+- Centered avatar and texts
+- Animated background (star gift patterns) and profile gifts
+- Bottom blur when expand avatar
+
+Known issues: (lack of time, sadly...):
+- Transitions to the profile must be improved
+- Blurs do not update as expected when scroll on avatars
+- Top cutout is handled, but screen records (and on some devices) may look weird!
+- Other minor glitches and possible improvements
+
 ## Telegram messenger for Android
 
 [Telegram](https://telegram.org) is a messaging app with a focus on speed and security. It’s superfast, simple and free.
