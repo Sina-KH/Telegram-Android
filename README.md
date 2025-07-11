@@ -1,8 +1,8 @@
 ## Telegram Contest 2025 r1
 
-Given the current circumstances in Iran, **including the war and internet issues**, I couldn’t rewrite the profile or spend as much time as planned. The result isn’t ideal, but I believe it reached an acceptable level, hopefully!
+Given the current circumstances in Iran, **including the war and internet issues**, I couldn’t rewrite the profile or spend as much time as planned. The result isn’t ideal, but I believe it reached an acceptable level to submit, hopefully!
 
-All the animations and actions are implemented, and I tried my best to handle edge cases and keep the code quality acceptable.
+Most of the animations and actions are implemented, and I tried my best to handle edge cases and keep the code quality acceptable.
 
 <img src="contest_result.gif" width="400" />
 
@@ -15,7 +15,8 @@ Key features:
 - Bottom blur when expand avatar
 
 Known issues: (lack of time, sadly...):
-- My Profile screen has some visual issues (and texts in some profile accounts are not centered)
+- `My Profile` screen has some visual issues
+-  Sometimes texts are not centered yet (oops!)
 - Transitions to the profile screen must be implemented 
 - Blur needs to be improved when expanding/collapsing
 - Top cutout is handled, but screen records (and on some devices) may look weird!
