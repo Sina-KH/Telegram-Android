@@ -1919,7 +1919,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         @Override
         public int getBlurAlpha() {
             if (!mediaHeaderVisible)
-                return 10;
+                return 50;
             return super.getBlurAlpha();
         }
 

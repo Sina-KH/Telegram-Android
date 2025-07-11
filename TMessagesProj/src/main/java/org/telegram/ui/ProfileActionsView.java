@@ -209,9 +209,9 @@ public class ProfileActionsView extends FrameLayout {
             Context context = fragment.getContext();
 
             int cornerRadius = AndroidUtilities.dp(10);
-            int defaultColor = ColorUtils.setAlphaComponent(Color.BLACK, 25);
+            int defaultColor = ColorUtils.setAlphaComponent(Color.BLACK, 0x33);
             int baseColor = Theme.getColor(Theme.key_windowBackgroundWhiteBlackText);
-            int pressedColor = ColorUtils.setAlphaComponent(baseColor, 0x33);
+            int pressedColor = ColorUtils.setAlphaComponent(baseColor, 0x50);
             int maskColor = ColorUtils.setAlphaComponent(baseColor, 0x50);
             setBackground(Theme.createSimpleSelectorRoundRectDrawable(
                     cornerRadius,

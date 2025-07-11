@@ -15,8 +15,8 @@ Key features:
 - Bottom blur when expand avatar
 
 Known issues: (lack of time, sadly...):
-- Transitions to the profile must be improved
-- Blurs do not update as expected when scroll on avatars
+- Transitions to the profile screen must be implemented 
+- Blur needs to be improved when expanding/collapsing
 - Top cutout is handled, but screen records (and on some devices) may look weird!
 - Other minor glitches and possible improvements
 
