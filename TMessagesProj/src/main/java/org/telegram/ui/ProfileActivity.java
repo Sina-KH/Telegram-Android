@@ -1249,11 +1249,11 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             Path arcAboveAvatar = new Path();
             float bottomPoint = min((1 - progress) * (avatarY + avatarRadius * 2), normalizedProgress * max(topCutoutHeight * 1.7f, (actionBar.getOccupyStatusBar() ? AndroidUtilities.statusBarHeight * 0.8f : 0)));
             quadToUsingCorner(arcAboveAvatar,
-                    avatarCenterX - topXOffset,
+                    avatarCenterX - topXOffset * (1 - progress) * 1.5f,
                     0f,
                     avatarCenterX,
                     bottomPoint,
-                    avatarCenterX + topXOffset,
+                    avatarCenterX + topXOffset * (1 - progress) * 1.5f,
                     0f
             );
             arcAboveAvatar.close();
@@ -5279,7 +5279,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         avatarContainer2.addView(overlaysView);
 
         actionsBlurView = new ActionsBlurView(context);
-        avatarContainer2.addView(actionsBlurView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 150, Gravity.TOP | Gravity.LEFT));
+        avatarContainer2.addView(actionsBlurView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, userId != getUserConfig().getClientUserId() ? 150 : 100, Gravity.TOP | Gravity.LEFT));
         contentView.blurBehindViews.add(actionsBlurView);
 
         avatarContainer2.addView(actionsView, LayoutHelper.createFrame(0, LayoutHelper.WRAP_CONTENT, Gravity.CENTER_HORIZONTAL));
@@ -5906,15 +5906,16 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
 
         final float k = AndroidUtilities.dpf2(8f);
 
+        float textY = (userId == UserConfig.getInstance(currentAccount).clientUserId) ? AndroidUtilities.dpf2(35.5f) : AndroidUtilities.dpf2(95.5f);
         final float nameTextViewXEnd = AndroidUtilities.dpf2(19f) - nameTextView[1].getLeft();
-        final float nameTextViewYEnd = newTop + extraHeight - AndroidUtilities.dpf2(95.5f) - nameTextView[1].getBottom();
+        final float nameTextViewYEnd = newTop + extraHeight - textY - nameTextView[1].getBottom();
         final float nameTextViewCx = k + nameX + (nameTextViewXEnd - nameX) / 2f;
         final float nameTextViewCy = k + nameY + (nameTextViewYEnd - nameY) / 2f;
         final float nameTextViewX = (1 - value) * (1 - value) * nameX + 2 * (1 - value) * value * nameTextViewCx + value * value * nameTextViewXEnd;
         final float nameTextViewY = (1 - value) * (1 - value) * nameY + 2 * (1 - value) * value * nameTextViewCy + value * value * nameTextViewYEnd;
 
         final float onlineTextViewXEnd = AndroidUtilities.dpf2(15f) - onlineTextView[1].getLeft();
-        final float onlineTextViewYEnd = newTop + extraHeight - AndroidUtilities.dpf2(78.5f) - onlineTextView[1].getBottom();
+        final float onlineTextViewYEnd = newTop + extraHeight - (textY - AndroidUtilities.dpf2(17f)) - onlineTextView[1].getBottom();
         final float onlineTextViewCx = k + onlineX + (onlineTextViewXEnd - onlineX) / 2f;
         final float onlineTextViewCy = k + onlineY + (onlineTextViewYEnd - onlineY) / 2f;
         final float onlineTextViewX = (1 - value) * (1 - value) * onlineX + 2 * (1 - value) * value * onlineTextViewCx + value * value * onlineTextViewXEnd;
@@ -7541,9 +7542,10 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                         }
                         onlineX = AndroidUtilities.dpf2(16f) - onlineTextView[1].getLeft();
                         nameTextView[1].setTranslationX(AndroidUtilities.dpf2(18f) - nameTextView[1].getLeft());
-                        nameTextView[1].setTranslationY(newTop + h - AndroidUtilities.dpf2(95.5f) - nameTextView[1].getBottom() + additionalTranslationY);
+                        float textY = (userId == UserConfig.getInstance(currentAccount).clientUserId) ? AndroidUtilities.dpf2(35.5f) : AndroidUtilities.dpf2(95.5f);
+                        nameTextView[1].setTranslationY(newTop + h - textY - nameTextView[1].getBottom() + additionalTranslationY);
                         onlineTextView[1].setTranslationX(onlineX + customPhotoOffset);
-                        onlineTextView[1].setTranslationY(newTop + h - AndroidUtilities.dpf2(78.5f) - onlineTextView[1].getBottom() + additionalTranslationY);
+                        onlineTextView[1].setTranslationY(newTop + h - (textY - dp(17)) - onlineTextView[1].getBottom() + additionalTranslationY);
                         mediaCounterTextView.setTranslationX(onlineTextView[1].getTranslationX());
                         mediaCounterTextView.setTranslationY(onlineTextView[1].getTranslationY());
                         updateCollectibleHint();
@@ -7748,7 +7750,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             overlaysLp.width = listView.getMeasuredWidth();
             overlaysLp.height = (int) (extraHeight + newTop);
             overlaysView.requestLayout();
-            actionsBlurView.setTranslationY(extraHeight + newTop - dp(150));
+            actionsBlurView.setTranslationY(extraHeight + newTop - dp(userId != getUserConfig().getClientUserId() ? 150 : 90));
         }
 
         if (actionsView != null) {
@@ -7764,7 +7766,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     actionsViewDesiredY
             ));
             actionsView.setActionsScale(clamp((actionsViewDesiredY - (actionsViewMinY - dp(54))) / AndroidUtilities.dpf2(54), 1f, 0f));
-            actionsBlurView.setTranslationY(extraHeight + newTop - dp(150));
+            actionsBlurView.setTranslationY(extraHeight + newTop - dp(userId != getUserConfig().getClientUserId() ? 150 : 90));
         }
 
         updateEmojiStatusEffectPosition();
@@ -10419,8 +10421,8 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             updateQrItemVisibility(true);
         }
         AndroidUtilities.runOnUIThread(this::updateEmojiStatusEffectPosition);
-        actionsView.setItemVisibility(ProfileActionsView.messageItem, userId > 0);
         if (userId != getUserConfig().getClientUserId()) {
+            actionsView.setItemVisibility(ProfileActionsView.messageItem, userId > 0);
             updateNotificationAction();
         }
         actionsView.setItemVisibility(ProfileActionsView.callItem, callItemVisible);

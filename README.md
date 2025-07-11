@@ -15,6 +15,7 @@ Key features:
 - Bottom blur when expand avatar
 
 Known issues: (lack of time, sadly...):
+- My Profile screen has some visual issues (and texts in some profile accounts are not centered)
 - Transitions to the profile screen must be implemented 
 - Blur needs to be improved when expanding/collapsing
 - Top cutout is handled, but screen records (and on some devices) may look weird!
