@@ -1896,7 +1896,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             sharedMediaLayout.drawListForBlur(blurCanvas, views);
             blurCanvas.translate(0, -listView.getY());
             if (!mediaHeaderVisible)
-                drawViewsForBlur(blurCanvas, Arrays.asList(avatarsViewPager, avatarImage), views);
+                drawViewsForBlur(blurCanvas, Arrays.asList(avatarImage, avatarsViewPager), views);
             blurCanvas.restore();
         }
 
@@ -14884,6 +14884,9 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 float dx = viewLocation[0] - frameLocation[0];
                 float dy = viewLocation[1] - frameLocation[1];
 
+                if (view instanceof ViewPager && view.getScrollX() != 0) {
+                    dx -= view.getScrollX();
+                }
                 int restore = blurCanvas.save();
                 blurCanvas.translate(dx, dy);
                 view.draw(blurCanvas);
@@ -14894,7 +14897,6 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
 
                 blurCanvas.restoreToCount(restore);
             }
-            blurCanvas.translate(0, -view.getY());
         }
     }
 
