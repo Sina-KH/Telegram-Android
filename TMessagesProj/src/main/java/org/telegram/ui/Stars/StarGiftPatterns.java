@@ -2,12 +2,12 @@ package org.telegram.ui.Stars;
 
 import static org.telegram.messenger.AndroidUtilities.dp;
 import static org.telegram.messenger.AndroidUtilities.dpf2;
+import static org.telegram.messenger.AndroidUtilities.lerp;
 
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
 
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.ui.ActionBar.Theme;
 
 public class StarGiftPatterns {
 
@@ -205,6 +205,69 @@ public class StarGiftPatterns {
                 (int) (b + dpf2(y) + dpf2(size) / 2.0f)
             );
             pattern.setAlpha((int) (0xFF * alpha * thisAlpha));
+            pattern.draw(canvas);
+        }
+    }
+
+    private static final float[] profileCenter = new float[] {
+            // Top | Bottom
+            0f, -66, 24f, 0.30f, 0.1f, 0.7f,
+            0f, 66f, 24f, 0.30f, 0.1f, 0.7f,
+
+            -45f, -77.33f, 16f, 0.26f, 0.2f, 0.9f,
+            45f, -77.33f, 16f, 0.25f, 0.2f, 0.9f,
+            -44f, 77.33f, 16f, 0.25f, 0.2f, 0.95f,
+            44f, 77.33f, 16f, 0.25f, 0.2f, 0.95f,
+
+            -85f, 0f, 20f, 0.25f, 0.26f, 0.85f,
+            85f, 0f, 20f, 0.25f, 0.26f, 0.85f,
+
+            -58f, -35.66f, 22f, 0.20f, 0.1f, 0.63f,
+            58f, -35.66f, 22f, 0.20f, 0.1f, 0.63f,
+            -60f, 34.66f, 22f, 0.20f, 0.1f, 0.66f,
+            60f, 34.66f, 22f, 0.20f, 0.1f, 0.66f,
+
+            -96f, -54f, 19f, 0.17f, 0.1f, 0.8f,
+            96f, -54f, 19f, 0.17f, 0.1f, 0.8f,
+            -99f, 56f, 19f, 0.17f, 0.1f, 0.8f,
+            99f, 56f, 19f, 0.17f, 0.1f, 0.8f,
+
+            // Left | Right
+            -133f, 0f, 17f, 0.12f, 0.2f, 0.9f,
+            133f, 0f, 17f, 0.12f, 0.2f, 0.9f,
+    };
+
+    private static float itemProgress(float startPoint, float endPoint, float progress) {
+        if (progress <= startPoint)
+            return 0f;
+        if (progress >= endPoint)
+            return 1f;
+        float giftProgress = (progress - startPoint) / (endPoint - startPoint);
+        return 1f - (1f - giftProgress) * (1f - giftProgress);
+    }
+
+    public static void drawProfilePatternCenter(Canvas canvas, Drawable pattern, float w, float startCenterY, float centerY, float expandProgress) {
+        if (expandProgress <= 0.0f) return;
+
+        final float centerX = w / 2;
+
+        for (int i = 0; i < profileCenter.length; i += 6) {
+            final float x = profileCenter[i];
+            final float y = profileCenter[i + 1];
+            final float size = profileCenter[i + 2];
+            final float thisAlpha = profileCenter[i + 3];
+            final float startPoint = profileCenter[i + 4];
+            final float endPoint = profileCenter[i + 5];
+            final float thisProgress = 1 - itemProgress(startPoint, endPoint, 1 - expandProgress);
+            final float thisCenterY = lerp(centerY, startCenterY, thisProgress);
+
+            pattern.setBounds(
+                    (int) (centerX + (dpf2(x) - dpf2(size) / 2.0f) * thisProgress),
+                    (int) (thisCenterY + (dpf2(y) - dpf2(size) / 2.0f) * thisProgress),
+                    (int) (centerX + (dpf2(x) + dpf2(size) / 2.0f) * thisProgress),
+                    (int) (thisCenterY + (dpf2(y) + dpf2(size) / 2.0f) * thisProgress)
+            );
+            pattern.setAlpha((int) (0xFF * thisProgress * thisAlpha));
             pattern.draw(canvas);
         }
     }
