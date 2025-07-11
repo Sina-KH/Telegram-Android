@@ -4,7 +4,7 @@ Given the current circumstances in Iran, **including the war and internet issues
 
 All the animations and actions are implemented, and I tried my best to handle edge cases and keep the code quality acceptable.
 
-![Contest Result](contest_result.gif)
+<img src="contest_result.gif" width="400" />
 
 Key features:
 - Implemented scrolling up animation for the avatar; Considered top cutout when scrolling avatar out of the screen
