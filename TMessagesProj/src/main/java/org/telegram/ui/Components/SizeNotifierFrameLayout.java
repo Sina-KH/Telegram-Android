@@ -126,7 +126,7 @@ public class SizeNotifierFrameLayout extends FrameLayout {
     //
 
     public void invalidateBlur() {
-        if (!SharedConfig.chatBlurEnabled()) {
+        if (!getIsBlurActive()) {
             return;
         }
         invalidateBlur = true;
@@ -600,7 +600,7 @@ public class SizeNotifierFrameLayout extends FrameLayout {
     final BlurBackgroundTask blurBackgroundTask = new BlurBackgroundTask();
 
     public void startBlur() {
-        if (!blurIsRunning || blurGeneratingTuskIsRunning || !invalidateBlur || !SharedConfig.chatBlurEnabled() || DRAW_USING_RENDERNODE()) {
+        if (!blurIsRunning || blurGeneratingTuskIsRunning || !invalidateBlur || !getIsBlurActive() || DRAW_USING_RENDERNODE()) {
             return;
         }
 
@@ -792,9 +792,13 @@ public class SizeNotifierFrameLayout extends FrameLayout {
     public void invalidateBlurredViews() {
         blurNodeInvalidated[0] = true;
         blurNodeInvalidated[1] = true;
-        for (int i = 0; i < blurBehindViews.size(); i++) {
+        for (int i = 0; i < getBlurBehindViews().size(); i++) {
             blurBehindViews.get(i).invalidate();
         }
+    }
+
+    private ArrayList<View> getBlurBehindViews() {
+        return blurBehindViews;
     }
 
     protected float getBottomOffset() {
@@ -880,7 +884,7 @@ public class SizeNotifierFrameLayout extends FrameLayout {
     }
 
     public boolean blurWasDrawn() {
-        return SharedConfig.chatBlurEnabled() && (DRAW_USING_RENDERNODE() || currentBitmap != null);
+        return getIsBlurActive() && (DRAW_USING_RENDERNODE() || currentBitmap != null);
     }
 
     private float lastDrawnBottomBlurOffset;
@@ -927,7 +931,7 @@ public class SizeNotifierFrameLayout extends FrameLayout {
         }
     }
 
-    private float getBlurRadius() {
+    public float getBlurRadius() {
         switch (SharedConfig.getDevicePerformanceClass()) {
             case SharedConfig.PERFORMANCE_CLASS_HIGH:
                 return 60;
@@ -939,9 +943,21 @@ public class SizeNotifierFrameLayout extends FrameLayout {
         }
     }
 
+    public int getBlurHeight() {
+        return ActionBar.getCurrentActionBarHeight() + AndroidUtilities.statusBarHeight + dp(100);
+    }
+
+    public int getBlurAlpha() {
+        return Color.alpha(Theme.getColor(DRAW_USING_RENDERNODE() && SharedConfig.getDevicePerformanceClass() == SharedConfig.PERFORMANCE_CLASS_HIGH ? Theme.key_chat_BlurAlpha : Theme.key_chat_BlurAlphaSlow, getResourceProvider()));
+    }
+
+    public boolean getIsBlurActive() {
+        return SharedConfig.chatBlurEnabled();
+    }
+
     public void drawBlurRect(Canvas canvas, float y, Rect rectTmp, Paint blurScrimPaint, boolean top) {
-        int blurAlpha = Color.alpha(Theme.getColor(DRAW_USING_RENDERNODE() && SharedConfig.getDevicePerformanceClass() == SharedConfig.PERFORMANCE_CLASS_HIGH ? Theme.key_chat_BlurAlpha : Theme.key_chat_BlurAlphaSlow, getResourceProvider()));
-        if (!SharedConfig.chatBlurEnabled()) {
+        int blurAlpha = getBlurAlpha();
+        if (!getIsBlurActive()) {
             canvas.drawRect(rectTmp, blurScrimPaint);
             return;
         }
@@ -970,7 +986,7 @@ public class SizeNotifierFrameLayout extends FrameLayout {
                     ));
                 }
                 int lastW = getMeasuredWidth();
-                int lastH = ActionBar.getCurrentActionBarHeight() + AndroidUtilities.statusBarHeight + dp(100);
+                int lastH = getBlurHeight();
                 blurNodes[a].setPosition(0, 0, (int) (lastW / scale), (int) ((lastH + 2 * pad) / scale));
                 RecordingCanvas recordingCanvas = blurNodes[a].beginRecording();
                 drawingBlur = true;
@@ -1034,7 +1050,7 @@ public class SizeNotifierFrameLayout extends FrameLayout {
 
     public void drawBlurCircle(Canvas canvas, float viewY, float cx, float cy, float radius, Paint blurScrimPaint, boolean top) {
         int blurAlpha = Color.alpha(Theme.getColor(DRAW_USING_RENDERNODE() ? Theme.key_chat_BlurAlpha : Theme.key_chat_BlurAlphaSlow));
-        if (currentBitmap == null || !SharedConfig.chatBlurEnabled()) {
+        if (currentBitmap == null || !getIsBlurActive()) {
             canvas.drawCircle(cx, cy, radius, blurScrimPaint);
             return;
         }
