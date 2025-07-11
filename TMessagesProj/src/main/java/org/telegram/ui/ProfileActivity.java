@@ -14048,7 +14048,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
 //        }
         if (userId == UserConfig.getInstance(currentAccount).clientUserId) {
             if (hasFallbackPhoto) {
-                customPhotoOffset = AndroidUtilities.dp(28) * photoDescriptionProgress;
+                customPhotoOffset = 0;// AndroidUtilities.dp(28) * photoDescriptionProgress;
                 if (onlineTextView[2] != null) {
                     onlineTextView[2].setAlpha(currentExpandAnimatorValue);
                     onlineTextView[3].setAlpha(1f - currentExpandAnimatorValue);
@@ -14903,16 +14903,32 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
     }
 
     float getNameCenterX(SimpleTextView textView, float diffText) {
-        if (textView == null)
+        SimpleTextView firstVisible = textView;
+        for (SimpleTextView tv : nameTextView) {
+            if (tv != null && tv.getVisibility() == View.VISIBLE) {
+                firstVisible = tv;
+                if (!myProfile && !mediaHeaderVisible)
+                    break;
+            }
+        }
+        if (firstVisible == null)
             return 0;
-        float textWidth = textView.getTextWidth() * textView.getScaleX() + textView.getSideDrawablesSize();
+        float textWidth = firstVisible.getTextWidth() * firstVisible.getScaleX() + firstVisible.getSideDrawablesSize();
         return diffText * (listView.getMeasuredWidth() - AndroidUtilities.dpf2(71.6f * 2f) - textWidth) / 2;
     }
 
     float getOnlineCenterX(SimpleTextView textView, float diffText) {
-        if (textView == null)
+        SimpleTextView firstVisible = textView;
+        for (SimpleTextView tv : onlineTextView) {
+            if (tv != null && tv.getVisibility() == View.VISIBLE) {
+                firstVisible = tv;
+                if (!myProfile && !mediaHeaderVisible)
+                    break;
+            }
+        }
+        if (firstVisible == null)
             return 0;
-        float textWidth = textView.getTextWidth() * textView.getScaleX() + textView.getSideDrawablesSize();
+        float textWidth = firstVisible.getTextWidth() * firstVisible.getScaleX() + firstVisible.getSideDrawablesSize();
         float rp = nameTextView[0] == null || !nameTextView[0].getRightDrawableOutside() ? 0 : nameTextView[0].getRightDrawableWidth();
         return diffText * (listView.getMeasuredWidth() - AndroidUtilities.dpf2(71.6f * 2f) - textWidth - rp) / 2;
     }
